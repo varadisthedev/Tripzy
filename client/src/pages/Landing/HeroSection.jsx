@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
-import { destinations } from "../data/destinations";
+import { ChevronDown, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
+import { destinations } from "../../data/destinations";
 
 /* ─── tiny helper ─── */
 const wrap = (idx, len) => ((idx % len) + len) % len;
@@ -15,13 +15,13 @@ export default function HeroSection() {
 
   const dest = destinations[activeIdx];
 
-  /* ─── auto-rotate destination every 6s ─── */
+  /* ─── auto-rotate destination every 6.5s ─── */
   useEffect(() => {
     const timer = setInterval(() => {
       setDirection(1);
       setActiveIdx((i) => wrap(i + 1, destinations.length));
       setCardIdx(0);
-    }, 6000);
+    }, 6500);
     return () => clearInterval(timer);
   }, []);
 
@@ -56,45 +56,72 @@ export default function HeroSection() {
 
   return (
     <section className="relative w-full h-screen min-h-[720px] overflow-hidden bg-slate-950" id="hero">
-      {/* ── Crisp Full-Bleed Background Images — pure CSS transition, no GPU blur ── */}
+      {/* ── Dynamic Cinematic Backgrounds with Slow Ken Burns Motion ── */}
       {destinations.map((d, i) => (
         <div
           key={`bg-${i}`}
-          className="absolute inset-0 w-full h-full"
+          className="absolute inset-0 w-full h-full overflow-hidden"
           style={{
             opacity: i === activeIdx ? 1 : 0,
-            transition: "opacity 1.2s ease-in-out",
+            transition: "opacity 1.4s ease-in-out",
             zIndex: i === activeIdx ? 1 : 0,
           }}
         >
-          <img
-            src={d.bgImage}
-            alt={d.name}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              objectPosition: "center",
-              display: "block",
-            }}
-            loading={i === 0 ? "eager" : "lazy"}
-          />
+          {i === activeIdx ? (
+            <motion.img
+              src={d.bgImage}
+              alt={d.name}
+              initial={{ scale: 1 }}
+              animate={{ scale: 1.08 }}
+              transition={{ duration: 7, ease: "linear", repeat: Infinity, repeatType: "reverse" }}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                objectPosition: "center",
+                display: "block",
+                filter: "saturate(1.2) contrast(1.06) brightness(0.92)",
+              }}
+              loading={i === 0 ? "eager" : "lazy"}
+            />
+          ) : (
+            <img
+              src={d.bgImage}
+              alt={d.name}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                objectPosition: "center",
+                display: "block",
+                filter: "saturate(1.2) contrast(1.06) brightness(0.92)",
+              }}
+              loading="lazy"
+            />
+          )}
         </div>
       ))}
 
-      {/* ── Lighter overlay — shows image clearly ── */}
+      {/* ── Atmospheric Ambient Lighting Glow ── */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute top-1/3 left-10 w-96 h-96 rounded-full pointer-events-none opacity-25 transition-all duration-1000"
         style={{
+          background: dest.accent || "#59A5D8",
+          filter: "blur(130px)",
           zIndex: 2,
-          background: "linear-gradient(90deg, rgba(5,10,20,0.60) 0%, rgba(5,10,20,0.30) 50%, rgba(5,10,20,0.10) 100%)",
         }}
       />
+
+      {/* ── Dark Vignette & Edge Shadow Layer ── */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           zIndex: 2,
-          background: "linear-gradient(180deg, rgba(5,10,20,0.25) 0%, transparent 35%, rgba(5,10,20,0.45) 100%)",
+          background: `
+            radial-gradient(ellipse at center, transparent 25%, rgba(2, 6, 18, 0.6) 70%, rgba(2, 6, 18, 0.95) 100%),
+            linear-gradient(90deg, rgba(2, 6, 18, 0.85) 0%, rgba(2, 6, 18, 0.4) 45%, rgba(2, 6, 18, 0.2) 100%),
+            linear-gradient(180deg, rgba(2, 6, 18, 0.7) 0%, transparent 30%, transparent 60%, rgba(2, 6, 18, 0.85) 100%)
+          `,
         }}
       />
 
@@ -102,7 +129,7 @@ export default function HeroSection() {
       <div className="relative z-10 h-full max-w-7xl mx-auto px-6 flex items-center">
         <div className="w-full flex flex-col lg:flex-row items-center lg:items-end justify-between gap-12 pb-16 pt-28">
 
-          {/* ══ LEFT — Text Written Directly On Background (No card box) ══ */}
+          {/* ══ LEFT — Text Written Directly On Background ══ */}
           <div className="flex-1 max-w-xl">
             {/* Destination dot indicators */}
             <div className="flex items-center gap-2 mb-6">
@@ -111,7 +138,7 @@ export default function HeroSection() {
                   key={d.id}
                   onClick={() => goTo(i)}
                   className={`transition-all duration-500 rounded-full ${i === activeIdx
-                    ? "w-8 h-2 bg-[#91E5F6]"
+                    ? "w-9 h-2 bg-[#91E5F6] shadow-[0_0_12px_rgba(145,229,246,0.8)]"
                     : "w-2.5 h-2.5 bg-white/40 hover:bg-white"
                     }`}
                   aria-label={d.name}
@@ -129,43 +156,40 @@ export default function HeroSection() {
                 exit="exit"
                 transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
               >
-                {/* Eyebrow */}
-                <p className="text-xs font-bold tracking-[0.25em] uppercase mb-2 font-sans-dm text-[#91E5F6]">
-                  Explore India
-                </p>
+                
 
-                {/* Main Destination Title — Written directly on background */}
+                {/* Main Destination Title */}
                 <h1
-                  className="font-display font-black text-white leading-none mb-3 hero-text-shadow"
+                  className="font-display font-black text-white leading-none mb-3 drop-shadow-2xl"
                   style={{ fontSize: "clamp(3.5rem, 8vw, 7rem)", letterSpacing: "-0.02em" }}
                 >
                   {dest.name}
                 </h1>
 
                 {/* Tagline */}
-                <p className="font-display italic text-[#84D2F6] text-xl lg:text-2xl mb-4 font-medium drop-shadow">
+                <p className="font-display italic text-[#84D2F6] text-xl lg:text-2xl mb-4 font-medium drop-shadow-md">
                   "{dest.tagline}"
                 </p>
 
                 {/* Description */}
-                <p className="text-white/85 text-base lg:text-lg leading-relaxed mb-8 font-sans-dm font-medium max-w-md drop-shadow-sm">
+                <p className="text-white/90 text-base lg:text-lg leading-relaxed mb-8 font-sans-dm font-medium max-w-md drop-shadow">
                   {dest.description}
                 </p>
 
-                {/* Buttons — Kept directly on background */}
+                {/* CTA Buttons */}
                 <div className="flex flex-wrap items-center gap-4">
                   <Link to="/signup">
                     <motion.button
                       id="plan-trip-hero-cta"
                       whileHover={{
                         scale: 1.05,
-                        boxShadow: "0 10px 30px rgba(56, 111, 164, 0.5)",
+                        boxShadow: "0 10px 35px rgba(56, 111, 164, 0.6)",
                       }}
                       whileTap={{ scale: 0.97 }}
                       className="flex items-center gap-2.5 px-7 py-3.5 rounded-full text-sm font-bold text-white tracking-wide transition-all"
                       style={{
                         background: "linear-gradient(135deg, #386FA4 0%, #133C55 100%)",
-                        boxShadow: "0 6px 24px rgba(56,111,164,0.4)",
+                        boxShadow: "0 6px 24px rgba(56,111,164,0.45)",
                       }}
                     >
                       Plan a Trip Now
@@ -191,7 +215,6 @@ export default function HeroSection() {
 
           {/* ══ RIGHT — Horizontal Destination Cards Carousel ══ */}
           <div className="flex-shrink-0 w-full lg:w-auto">
-
 
             {/* Cards row */}
             <div className="flex items-end gap-3 overflow-x-visible">
@@ -224,7 +247,7 @@ export default function HeroSection() {
                         exit={{ opacity: 0, x: -60 }}
                         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
                         onClick={() => !isActive && setCardIdx(placeIdx)}
-                        className={`relative rounded-2xl overflow-hidden cursor-pointer flex-shrink-0 shadow-2xl transition-all border ${isActive ? "border-[#91E5F6] ring-2 ring-[#84D2F6]/60" : "border-white/20"
+                        className={`relative rounded-3xl overflow-hidden cursor-pointer flex-shrink-0 shadow-2xl transition-all border-4 border-white ${isActive ? "ring-4 ring-white/40 shadow-white/20" : "opacity-85"
                           }`}
                         style={{
                           width: isActive ? "185px" : "145px",

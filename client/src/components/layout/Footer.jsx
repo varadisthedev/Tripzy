@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { MapPin, Globe, Rss, Share } from "lucide-react";
+import { Globe, Rss, Share } from "lucide-react";
+
 
 export default function Footer() {
   const links = {
@@ -10,7 +11,7 @@ export default function Footer() {
 
   return (
     <footer
-      className="relative border-t py-16 px-6 overflow-hidden bg-[#133C55] text-white"
+      className="relative border-t py-16 px-6 overflow-hidden bg-[#344966] text-white"
       style={{
         borderColor: "rgba(145,229,246,0.2)",
       }}
@@ -25,20 +26,10 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-5 gap-12 mb-12">
           {/* Brand */}
           <div className="md:col-span-2">
-            <div className="flex items-center gap-2 mb-5">
-              <div
-                className="w-9 h-9 rounded-xl flex items-center justify-center"
-                style={{ background: "linear-gradient(135deg, #59A5D8, #386FA4)" }}
-              >
-                <MapPin size={18} className="text-white" strokeWidth={2.5} />
-              </div>
-              <span className="font-display text-2xl font-bold text-white tracking-wide">
-                Yatra<span className="text-[#91E5F6]">AI</span>
-              </span>
-            </div>
-            <p className="text-[#84D2F6]/80 text-sm leading-relaxed max-w-xs mb-6 font-sans-dm font-medium">
+         
+            <p className="text-[#f4f4f8]/80 text-sm leading-relaxed max-w-xs mb-6 font-sans-dm font-medium">
               India's most intelligent travel planning platform. Discover,
-              plan, and travel across India — all powered by AI.
+              plan, and travel across India 
             </p>
             <div className="flex items-center gap-3">
               {[Globe, Share, Rss].map((Icon, i) => (
@@ -79,10 +70,10 @@ export default function Footer() {
           className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6"
           style={{ borderTop: "1px solid rgba(145,229,246,0.15)" }}
         >
-          <p className="text-[#84D2F6]/60 text-xs font-sans-dm font-medium">
-            © 2026 YatraAI. All rights reserved.
+          <p className="text-[#f4f4f8]/60 text-xs font-sans-dm font-medium">
+            © 2026 Tripzy. All rights reserved.
           </p>
-          <p className="text-[#84D2F6]/60 text-xs font-sans-dm font-medium">
+          <p className="text-[#f4f4f8]/60 text-xs font-sans-dm font-medium">
             Made in India 🇮🇳
           </p>
         </div>
