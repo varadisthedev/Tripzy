@@ -25,22 +25,29 @@ export default function Navbar() {
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.7, ease: "easeOut" }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? "glass-light py-3 shadow-md" : "bg-transparent py-5"
-        }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        scrolled ? "glass-light py-3 shadow-md" : "bg-transparent py-5"
+      }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between gap-6">
-
         {/* ── Logo ── */}
         <Link to="/" className="flex items-center gap-2 flex-shrink-0">
-          <motion.div whileHover={{ scale: 1.05 }} className="flex items-center gap-2">
-            <div
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            className="flex items-center gap-2"
+          >
+            {/* <div
               className="w-8 h-8 rounded-lg flex items-center justify-center"
-              style={{ background: "linear-gradient(135deg, #386FA4, #133C55)" }}
+              style={{
+                background: "linear-gradient(135deg, #386FA4, #133C55)",
+              }}
             >
               <MapPin size={16} className="text-white" strokeWidth={2.5} />
-            </div>
-            <span className={`font-display text-xl font-bold tracking-wide transition-colors ${scrolled ? "text-[#133C55]" : "text-white"}`}>
-              Yatra<span className={scrolled ? "text-[#386FA4]" : "text-[#91E5F6]"}>AI</span>
+            </div> */}
+            <span
+              className={`font-display text-xl font-bold tracking-wide transition-colors ${scrolled ? "text-[#133C55]" : "text-white"}`}
+            >
+              Tripzy
             </span>
           </motion.div>
         </Link>
@@ -51,8 +58,11 @@ export default function Navbar() {
             <a
               key={link.label}
               href={link.href}
-              className={`text-sm font-semibold transition-colors duration-200 tracking-wide ${scrolled ? "text-[#133C55]/75 hover:text-[#133C55]" : "text-white/80 hover:text-white"
-                }`}
+              className={`text-sm font-semibold transition-colors duration-200 tracking-wide ${
+                scrolled
+                  ? "text-[#133C55]/75 hover:text-[#133C55]"
+                  : "text-white/80 hover:text-white"
+              }`}
             >
               {link.label}
             </a>
@@ -67,10 +77,11 @@ export default function Navbar() {
               id="navbar-login"
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold transition-all border ${scrolled
+              className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold transition-all border ${
+                scrolled
                   ? "text-[#133C55] border-[#133C55]/25 hover:bg-[#133C55]/8"
                   : "text-white border-white/30 hover:bg-white/10"
-                }`}
+              }`}
             >
               <LogIn size={14} strokeWidth={2.5} />
               Login
@@ -81,7 +92,10 @@ export default function Navbar() {
           <Link to="/signup">
             <motion.button
               id="navbar-signup"
-              whileHover={{ scale: 1.05, boxShadow: "0 6px 24px rgba(56,111,164,0.4)" }}
+              whileHover={{
+                scale: 1.05,
+                boxShadow: "0 6px 24px rgba(56,111,164,0.4)",
+              }}
               whileTap={{ scale: 0.97 }}
               className="flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-bold text-white"
               style={{
@@ -104,8 +118,9 @@ export default function Navbar() {
           {[0, 1, 2].map((i) => (
             <span
               key={i}
-              className={`block w-5 h-0.5 rounded-full transition-all ${scrolled ? "bg-[#133C55]" : "bg-white"
-                }`}
+              className={`block w-5 h-0.5 rounded-full transition-all ${
+                scrolled ? "bg-[#133C55]" : "bg-white"
+              }`}
             />
           ))}
         </button>
@@ -131,15 +146,25 @@ export default function Navbar() {
               </a>
             ))}
             <div className="flex gap-3 mt-4">
-              <Link to="/login" className="flex-1" onClick={() => setMenuOpen(false)}>
+              <Link
+                to="/login"
+                className="flex-1"
+                onClick={() => setMenuOpen(false)}
+              >
                 <button className="w-full py-3 rounded-full text-sm font-bold text-[#133C55] border border-[#133C55]/25">
                   Login
                 </button>
               </Link>
-              <Link to="/signup" className="flex-1" onClick={() => setMenuOpen(false)}>
+              <Link
+                to="/signup"
+                className="flex-1"
+                onClick={() => setMenuOpen(false)}
+              >
                 <button
                   className="w-full py-3 rounded-full text-sm font-bold text-white"
-                  style={{ background: "linear-gradient(135deg, #386FA4, #133C55)" }}
+                  style={{
+                    background: "linear-gradient(135deg, #386FA4, #133C55)",
+                  }}
                 >
                   Sign Up
                 </button>

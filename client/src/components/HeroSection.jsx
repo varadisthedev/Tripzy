@@ -1,7 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  ArrowRight,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { destinations } from "../data/destinations";
 
 /* ─── tiny helper ─── */
@@ -41,7 +46,7 @@ export default function HeroSection() {
       setActiveIdx(wrap(idx, destinations.length));
       setCardIdx(0);
     },
-    [activeIdx]
+    [activeIdx],
   );
 
   const nextCard = () => setCardIdx((i) => wrap(i + 1, dest.places.length));
@@ -55,7 +60,10 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative w-full h-screen min-h-[720px] overflow-hidden bg-slate-950" id="hero">
+    <section
+      className="relative w-full h-screen min-h-[720px] overflow-hidden bg-slate-950"
+      id="hero"
+    >
       {/* ── Crisp Full-Bleed Background Images — pure CSS transition, no GPU blur ── */}
       {destinations.map((d, i) => (
         <div
@@ -76,6 +84,7 @@ export default function HeroSection() {
               objectFit: "cover",
               objectPosition: "center",
               display: "block",
+              filter: "blur(0.65px)",
             }}
             loading={i === 0 ? "eager" : "lazy"}
           />
@@ -87,21 +96,22 @@ export default function HeroSection() {
         className="absolute inset-0 pointer-events-none"
         style={{
           zIndex: 2,
-          background: "linear-gradient(90deg, rgba(5,10,20,0.60) 0%, rgba(5,10,20,0.30) 50%, rgba(5,10,20,0.10) 100%)",
+          background:
+            "linear-gradient(90deg, rgba(5,10,20,0.60) 0%, rgba(5,10,20,0.30) 50%, rgba(5,10,20,0.10) 100%)",
         }}
       />
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           zIndex: 2,
-          background: "linear-gradient(180deg, rgba(5,10,20,0.25) 0%, transparent 35%, rgba(5,10,20,0.45) 100%)",
+          background:
+            "linear-gradient(180deg, rgba(5,10,20,0.25) 0%, transparent 35%, rgba(5,10,20,0.45) 100%)",
         }}
       />
 
       {/* ── Main Content ── */}
       <div className="relative z-10 h-full max-w-7xl mx-auto px-6 flex items-center">
         <div className="w-full flex flex-col lg:flex-row items-center lg:items-end justify-between gap-12 pb-16 pt-28">
-
           {/* ══ LEFT — Text Written Directly On Background (No card box) ══ */}
           <div className="flex-1 max-w-xl">
             {/* Destination dot indicators */}
@@ -110,10 +120,11 @@ export default function HeroSection() {
                 <button
                   key={d.id}
                   onClick={() => goTo(i)}
-                  className={`transition-all duration-500 rounded-full ${i === activeIdx
-                    ? "w-8 h-2 bg-[#91E5F6]"
-                    : "w-2.5 h-2.5 bg-white/40 hover:bg-white"
-                    }`}
+                  className={`transition-all duration-500 rounded-full ${
+                    i === activeIdx
+                      ? "w-8 h-2 bg-[#91E5F6]"
+                      : "w-2.5 h-2.5 bg-white/40 hover:bg-white"
+                  }`}
                   aria-label={d.name}
                 />
               ))}
@@ -137,7 +148,10 @@ export default function HeroSection() {
                 {/* Main Destination Title — Written directly on background */}
                 <h1
                   className="font-display font-black text-white leading-none mb-3 hero-text-shadow"
-                  style={{ fontSize: "clamp(3.5rem, 8vw, 7rem)", letterSpacing: "-0.02em" }}
+                  style={{
+                    fontSize: "clamp(3.5rem, 8vw, 7rem)",
+                    letterSpacing: "-0.02em",
+                  }}
                 >
                   {dest.name}
                 </h1>
@@ -164,7 +178,8 @@ export default function HeroSection() {
                       whileTap={{ scale: 0.97 }}
                       className="flex items-center gap-2.5 px-7 py-3.5 rounded-full text-sm font-bold text-white tracking-wide transition-all"
                       style={{
-                        background: "linear-gradient(135deg, #386FA4 0%, #133C55 100%)",
+                        background:
+                          "linear-gradient(135deg, #386FA4 0%, #133C55 100%)",
                         boxShadow: "0 6px 24px rgba(56,111,164,0.4)",
                       }}
                     >
@@ -191,8 +206,6 @@ export default function HeroSection() {
 
           {/* ══ RIGHT — Horizontal Destination Cards Carousel ══ */}
           <div className="flex-shrink-0 w-full lg:w-auto">
-
-
             {/* Cards row */}
             <div className="flex items-end gap-3 overflow-x-visible">
               {/* Prev button */}
@@ -212,7 +225,10 @@ export default function HeroSection() {
                   const place = dest.places[placeIdx];
                   const isActive = offset === 0;
                   return (
-                    <AnimatePresence key={`${activeIdx}-${placeIdx}`} mode="wait">
+                    <AnimatePresence
+                      key={`${activeIdx}-${placeIdx}`}
+                      mode="wait"
+                    >
                       <motion.div
                         layout
                         initial={{ opacity: 0, x: 60, scale: 0.85 }}
@@ -222,10 +238,16 @@ export default function HeroSection() {
                           scale: isActive ? 1 : 0.88,
                         }}
                         exit={{ opacity: 0, x: -60 }}
-                        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                        transition={{
+                          duration: 0.55,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
                         onClick={() => !isActive && setCardIdx(placeIdx)}
-                        className={`relative rounded-2xl overflow-hidden cursor-pointer flex-shrink-0 shadow-2xl transition-all border ${isActive ? "border-[#91E5F6] ring-2 ring-[#84D2F6]/60" : "border-white/20"
-                          }`}
+                        className={`relative rounded-2xl overflow-hidden cursor-pointer flex-shrink-0 shadow-2xl transition-all border ${
+                          isActive
+                            ? "border-[#91E5F6] ring-2 ring-[#84D2F6]/60"
+                            : "border-white/20"
+                        }`}
                         style={{
                           width: isActive ? "185px" : "145px",
                           height: isActive ? "245px" : "195px",
@@ -289,8 +311,11 @@ export default function HeroSection() {
                 <button
                   key={i}
                   onClick={() => setCardIdx(i)}
-                  className={`rounded-full transition-all duration-300 ${i === cardIdx ? "w-4 h-1.5 bg-[#91E5F6]" : "w-1.5 h-1.5 bg-white/40"
-                    }`}
+                  className={`rounded-full transition-all duration-300 ${
+                    i === cardIdx
+                      ? "w-4 h-1.5 bg-[#91E5F6]"
+                      : "w-1.5 h-1.5 bg-white/40"
+                  }`}
                 />
               ))}
             </div>
