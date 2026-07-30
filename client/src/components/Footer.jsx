@@ -28,7 +28,9 @@ export default function Footer() {
             <div className="flex items-center gap-2 mb-5">
               <div
                 className="w-9 h-9 rounded-xl flex items-center justify-center"
-                style={{ background: "linear-gradient(135deg, #59A5D8, #386FA4)" }}
+                style={{
+                  background: "linear-gradient(135deg, #59A5D8, #386FA4)",
+                }}
               >
                 <MapPin size={18} className="text-white" strokeWidth={2.5} />
               </div>
@@ -37,8 +39,8 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-[#84D2F6]/80 text-sm leading-relaxed max-w-xs mb-6 font-sans-dm font-medium">
-              India's most intelligent travel planning platform. Discover,
-              plan, and travel across India — all powered by AI.
+              India's most intelligent travel planning platform. Discover, plan,
+              and travel across India — all powered by AI.
             </p>
             <div className="flex items-center gap-3">
               {[Globe, Share, Rss].map((Icon, i) => (
@@ -57,7 +59,9 @@ export default function Footer() {
           {/* Links */}
           {Object.entries(links).map(([group, items]) => (
             <div key={group}>
-              <h4 className="text-[#91E5F6] font-bold text-sm mb-4 tracking-wide">{group}</h4>
+              <h4 className="text-[#91E5F6] font-bold text-sm mb-4 tracking-wide">
+                {group}
+              </h4>
               <ul className="space-y-2.5">
                 {items.map((item) => (
                   <li key={item}>
@@ -75,12 +79,12 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div 
+        <div
           className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6"
           style={{ borderTop: "1px solid rgba(145,229,246,0.15)" }}
         >
           <p className="text-[#84D2F6]/60 text-xs font-sans-dm font-medium">
-            © 2026 YatraAI. All rights reserved.
+            © 2026 Tripzy. All rights reserved.
           </p>
           <p className="text-[#84D2F6]/60 text-xs font-sans-dm font-medium">
             Made in India 🇮🇳
