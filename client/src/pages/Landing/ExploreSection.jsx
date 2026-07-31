@@ -10,7 +10,7 @@ import {
   Plane,
   ArrowRight,
 } from "lucide-react";
-import { exploreSteps } from "../data/destinations";
+import { exploreSteps } from "../../data/destinations";
 
 const iconMap = {
   Compass,
