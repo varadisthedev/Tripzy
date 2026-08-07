@@ -45,7 +45,7 @@ export default function LoginPage() {
           <div className="absolute top-12 left-0 right-0 px-5 z-10">
             <h1 className="font-display font-extrabold text-[#0f2442] text-4xl sm:text-[2.65rem] leading-[1.15] mb-3">
               Welcome
-            <span className="text-[#2c497f]">Back!</span>
+              <span className="text-[#2c497f]">Back!</span>
             </h1>
             <p className="text-[#000000] text-sm leading-relaxed max-w-[260px] font-sans-dm font-bold">
               Continue your journey across India and explore your saved itineraries.
