@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { destinations } from "../../data/destinations";
+import AuthModal from "../../components/ui/AuthModal";
 
 /* ─── tiny helper ─── */
 const wrap = (idx, len) => ((idx % len) + len) % len;
@@ -10,8 +10,9 @@ const wrap = (idx, len) => ((idx % len) + len) % len;
 export default function HeroSection() {
   const [activeIdx, setActiveIdx] = useState(0);
   const [cardIdx, setCardIdx] = useState(0);
-  const [direction, setDirection] = useState(1); // 1 = forward, -1 = backward
+  const [direction, setDirection] = useState(1);
   const [bgLoaded, setBgLoaded] = useState({});
+  const [authModal, setAuthModal] = useState(null); // null | "login" | "signup"
 
   const dest = destinations[activeIdx];
 
@@ -112,24 +113,29 @@ export default function HeroSection() {
         }}
       />
 
-      {/* ── Dark Vignette & Edge Shadow Layer ── */}
+      {/* ── White Overlay — heavier on left (text area), fades right ── */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           zIndex: 2,
           background: `
-            radial-gradient(ellipse at center, transparent 25%, rgba(2, 6, 18, 0.6) 70%, rgba(2, 6, 18, 0.95) 100%),
-            linear-gradient(90deg, rgba(2, 6, 18, 0.85) 0%, rgba(2, 6, 18, 0.4) 45%, rgba(2, 6, 18, 0.2) 100%),
-            linear-gradient(180deg, rgba(2, 6, 18, 0.7) 0%, transparent 30%, transparent 60%, rgba(2, 6, 18, 0.85) 100%)
+            linear-gradient(105deg,
+              rgba(255,255,255,0.82) 0%,
+              rgba(255,255,255,0.65) 28%,
+              rgba(255,255,255,0.30) 52%,
+              rgba(255,255,255,0.08) 72%,
+              rgba(255,255,255,0.0) 100%
+            )
           `,
         }}
       />
+
 
       {/* ── Main Content ── */}
       <div className="relative z-10 h-full max-w-7xl mx-auto px-6 flex items-center">
         <div className="w-full flex flex-col lg:flex-row items-center lg:items-end justify-between gap-12 pb-16 pt-28">
 
-          {/* ══ LEFT — Text Written Directly On Background ══ */}
+          {/* ══ LEFT — Text directly on overlay (no separate card) ══ */}
           <div className="flex-1 max-w-xl">
             {/* Destination dot indicators */}
             <div className="flex items-center gap-2 mb-6">
@@ -138,8 +144,8 @@ export default function HeroSection() {
                   key={d.id}
                   onClick={() => goTo(i)}
                   className={`transition-all duration-500 rounded-full ${i === activeIdx
-                    ? "w-9 h-2 bg-[#91E5F6] shadow-[0_0_12px_rgba(145,229,246,0.8)]"
-                    : "w-2.5 h-2.5 bg-white/40 hover:bg-white"
+                    ? "w-9 h-2 bg-[#133C55] shadow-[0_0_10px_rgba(19,60,85,0.5)]"
+                    : "w-2.5 h-2.5 bg-[#133C55]/30 hover:bg-[#133C55]/70"
                     }`}
                   aria-label={d.name}
                 />
@@ -156,49 +162,47 @@ export default function HeroSection() {
                 exit="exit"
                 transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
               >
-                
 
                 {/* Main Destination Title */}
                 <h1
-                  className="font-display font-black text-white leading-none mb-3 drop-shadow-2xl"
-                  style={{ fontSize: "clamp(3.5rem, 8vw, 7rem)", letterSpacing: "-0.02em" }}
+                  className="font-display font-black text-[#050D1A] leading-none mb-3"
+                  style={{ fontSize: "clamp(3rem, 7vw, 6rem)", letterSpacing: "-0.02em" }}
                 >
                   {dest.name}
                 </h1>
 
                 {/* Tagline */}
-                <p className="font-display italic text-[#84D2F6] text-xl lg:text-2xl mb-4 font-medium drop-shadow-md">
+                <p className="font-display italic text-[#0D324D] text-xl lg:text-2xl mb-4 font-bold">
                   "{dest.tagline}"
                 </p>
 
                 {/* Description */}
-                <p className="text-white/90 text-base lg:text-lg leading-relaxed mb-8 font-sans-dm font-medium max-w-md drop-shadow">
+                <p className="text-[#1a2e3b] text-base lg:text-lg leading-relaxed mb-8 font-sans-dm font-semibold max-w-md">
                   {dest.description}
                 </p>
 
                 {/* CTA Buttons */}
                 <div className="flex flex-wrap items-center gap-4">
-                  <Link to="/signup">
-                    <motion.button
-                      id="plan-trip-hero-cta"
-                      whileHover={{
-                        scale: 1.05,
-                        boxShadow: "0 10px 35px rgba(56, 111, 164, 0.6)",
-                      }}
-                      whileTap={{ scale: 0.97 }}
-                      className="flex items-center gap-2.5 px-7 py-3.5 rounded-full text-sm font-bold text-white tracking-wide transition-all"
-                      style={{
-                        background: "linear-gradient(135deg, #386FA4 0%, #133C55 100%)",
-                        boxShadow: "0 6px 24px rgba(56,111,164,0.45)",
-                      }}
-                    >
-                      Plan a Trip Now
-                    </motion.button>
-                  </Link>
+                  <motion.button
+                    id="plan-trip-hero-cta"
+                    onClick={() => setAuthModal("signup")}
+                    whileHover={{
+                      scale: 1.05,
+                      boxShadow: "0 10px 35px rgba(56, 111, 164, 0.6)",
+                    }}
+                    whileTap={{ scale: 0.97 }}
+                    className="flex items-center gap-2.5 px-7 py-3.5 rounded-full text-sm font-bold text-white tracking-wide transition-all"
+                    style={{
+                      background: "linear-gradient(135deg, #386FA4 0%, #133C55 100%)",
+                      boxShadow: "0 6px 24px rgba(56,111,164,0.45)",
+                    }}
+                  >
+                    Plan a Trip Now
+                  </motion.button>
 
                   <motion.button
                     whileHover={{ y: 3 }}
-                    className="flex items-center gap-1.5 text-white/80 hover:text-white text-sm font-bold transition-colors"
+                    className="flex items-center gap-1.5 text-[#050D1A] hover:text-[#0D324D] text-sm font-extrabold transition-colors"
                     onClick={() => {
                       document
                         .getElementById("explore-section")
@@ -332,6 +336,13 @@ export default function HeroSection() {
           scroll
         </span>
       </motion.div>
+      {/* ── Floating Auth Modal ── */}
+      {authModal && (
+        <AuthModal
+          defaultTab={authModal}
+          onClose={() => setAuthModal(null)}
+        />
+      )}
     </section>
   );
 }
