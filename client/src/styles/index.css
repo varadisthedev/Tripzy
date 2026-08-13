@@ -70,6 +70,10 @@
     font-family: "DM Sans", "Inter", sans-serif;
   }
 
+  .font-sans-secondary {
+    font-family: "Cormorant Garamond", Georgia, serif;
+  }
+
   .glass {
     background: var(--glass-bg);
     backdrop-filter: blur(16px);
