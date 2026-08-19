@@ -14,6 +14,11 @@ import { connectDatabase } from "./db/client.js";
 import { errorMiddleware } from "./middlewares/error.middleware.js";
 import router from "./routes/index.js";
 
+// Render (and most single-hop PaaS reverse proxies) sit in front of the app
+// and set X-Forwarded-For. Trusting exactly one hop lets express-rate-limit
+// (and req.ip generally) resolve the real client IP instead of the proxy's.
+app.set("trust proxy", 1);
+
 // middlewares
 app.use(morgan("dev"));
 app.use(helmet());
