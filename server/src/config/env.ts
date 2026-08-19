@@ -3,6 +3,7 @@ import { z } from "zod";
 
 dotenv.config();
 
+<<<<<<< HEAD
 const envSchema = z
     .object({
         NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
@@ -23,6 +24,15 @@ const envSchema = z
         message: "DATABASE_URL or NEON_URI is required",
         path: ["DATABASE_URL"],
     });
+=======
+const envSchema = z.object({
+    NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
+    PORT: z.coerce.number().default(5000),
+    CLIENT_ORIGIN: z.string().url().default("http://localhost:5173"),
+    MONGO_URI: z.string().min(1, "MONGO_URI is required"),
+    JWT_SECRET: z.string().min(1, "JWT_SECRET is required"),
+});
+>>>>>>> ee5df9a4864993e52cb5fba829cddd1c386b14a6
 
 const parsed = envSchema.safeParse(process.env);
 
@@ -31,6 +41,7 @@ if (!parsed.success) {
     process.exit(1);
 }
 
+<<<<<<< HEAD
 const data = parsed.data;
 
 export const env = {
@@ -38,3 +49,6 @@ export const env = {
     DATABASE_URL: (data.DATABASE_URL || data.NEON_URI) as string,
     CORS_ORIGIN_LIST: data.CORS_ORIGINS.split(",").map((origin) => origin.trim()).filter(Boolean),
 };
+=======
+export const env = parsed.data;
+>>>>>>> ee5df9a4864993e52cb5fba829cddd1c386b14a6

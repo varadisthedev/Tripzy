@@ -42,6 +42,7 @@ export function logoutUser() {
     method: "POST",
   });
 }
+<<<<<<< HEAD
 
 export function fetchUserProfile() {
   return request("/users/profile");
@@ -53,3 +54,5 @@ export function updateUserProfile(payload) {
     body: JSON.stringify(payload),
   });
 }
+=======
+>>>>>>> ee5df9a4864993e52cb5fba829cddd1c386b14a6
