@@ -1,37 +1,31 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { env } from "../config/env.js";
-import { JWTPayload } from "../types/auth.types.js";
-
 import crypto from "crypto";
-
 export class AuthService {
-    generateAccessToken(payload: JWTPayload): string {
+    generateAccessToken(payload) {
         return jwt.sign({ ...payload, type: "access" }, env.JWT_SECRET, {
             expiresIn: "15m",
         });
     }
-
-    generateRefreshToken(payload: JWTPayload): string {
+    generateRefreshToken(payload) {
         return jwt.sign({ ...payload, type: "refresh" }, env.JWT_SECRET, {
             expiresIn: "7d",
         });
     }
-
-    verifyToken(token: string): JWTPayload {
+    verifyToken(token) {
         try {
-            const decoded = jwt.verify(token, env.JWT_SECRET) as JWTPayload;
+            const decoded = jwt.verify(token, env.JWT_SECRET);
             return decoded;
-        } catch (error) {
+        }
+        catch (error) {
             throw new Error("Invalid or expired token");
         }
     }
-
-    hashToken(token: string): string {
+    hashToken(token) {
         return crypto.createHash("sha256").update(token).digest("hex");
     }
-
-    validatePassword(password: string): { valid: boolean; message?: string } {
+    validatePassword(password) {
         if (!password || typeof password !== "string") {
             return { valid: false, message: "Password is required" };
         }
@@ -44,19 +38,17 @@ export class AuthService {
         }
         return { valid: true };
     }
-
-    async hashPassword(password: string): Promise<string> {
+    async hashPassword(password) {
         const { valid, message } = this.validatePassword(password);
         if (!valid) {
             throw new Error(message || "Invalid password");
         }
         return bcrypt.hash(password, 12);
     }
-
-    async comparePasswords(password: string, hashed: string): Promise<boolean> {
-        if (!password || !hashed) return false;
+    async comparePasswords(password, hashed) {
+        if (!password || !hashed)
+            return false;
         return bcrypt.compare(password, hashed);
     }
 }
-
 export const authService = new AuthService();

@@ -1,4 +1,7 @@
 {
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist", "index.ts", "routes", "middlewares", "models"],
+
   // Visit https://aka.ms/tsconfig to read more about this file
 
   "compilerOptions": {
