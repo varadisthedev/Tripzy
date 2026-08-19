@@ -6,15 +6,11 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
-<<<<<<< HEAD
     "start": "node dist/index.js",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio"
-=======
-    "start": "node dist/index.js"
->>>>>>> ee5df9a4864993e52cb5fba829cddd1c386b14a6
   },
   "keywords": [],
   "author": "",
@@ -26,20 +22,12 @@
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
-<<<<<<< HEAD
     "drizzle-orm": "^0.45.2",
     "express": "^5.2.1",
     "helmet": "^8.3.0",
     "jsonwebtoken": "^9.0.3",
     "morgan": "^1.11.0",
     "pg": "^8.23.0",
-=======
-    "express": "^5.2.1",
-    "helmet": "^8.3.0",
-    "jsonwebtoken": "^9.0.3",
-    "mongoose": "^9.8.1",
-    "morgan": "^1.11.0",
->>>>>>> ee5df9a4864993e52cb5fba829cddd1c386b14a6
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -50,11 +38,8 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/morgan": "^1.9.10",
     "@types/node": "^26.1.2",
-<<<<<<< HEAD
     "@types/pg": "^8.23.1",
     "drizzle-kit": "^0.31.10",
-=======
->>>>>>> ee5df9a4864993e52cb5fba829cddd1c386b14a6
     "tsx": "^4.23.1",
     "typescript": "^7.0.2"
   }
