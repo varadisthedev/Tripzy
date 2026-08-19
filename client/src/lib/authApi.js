@@ -42,3 +42,14 @@ export function logoutUser() {
     method: "POST",
   });
 }
+
+export function fetchUserProfile() {
+  return request("/users/profile");
+}
+
+export function updateUserProfile(payload) {
+  return request("/users/profile", {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+}
