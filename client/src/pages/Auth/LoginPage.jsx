@@ -60,14 +60,8 @@ export default function LoginPage() {
               Welcome
               <span className="text-[#2c497f]">Back!</span>
             </h1>
-<<<<<<< HEAD
-            <p className="text-[#000000] text-sm leading-relaxed max-w-[260px] font-sans-dm font-bold">
-              Continue your journey across India and explore your saved
-              itineraries.
-=======
             <p className="text-[#000000] text-base sm:text-lg leading-relaxed max-w-[290px] font-sans-secondary font-bold italic">
               Continue your journey across India and explore your saved itineraries.
->>>>>>> 5773f2c480c523555d3711538211c9f34f87f0f1
             </p>
           </div>
         </div>
