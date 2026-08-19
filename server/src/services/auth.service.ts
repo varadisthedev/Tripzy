@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 import { env } from "../config/env.js";
 import { JWTPayload } from "../types/auth.types.js";
 
