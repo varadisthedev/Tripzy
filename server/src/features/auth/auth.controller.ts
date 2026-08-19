@@ -1,29 +1,13 @@
 import type { Request, Response } from "express";
 import { env } from "../../config/env.js";
-<<<<<<< HEAD
 import { userRepository } from "../users/user.repository.js";
 import { authService } from "../../services/auth.service.js";
 import type { UserRow } from "../../db/schema.js";
-=======
-import { UserModel } from "../../models/User.js";
-import { authService } from "../../services/auth.service.js";
->>>>>>> ee5df9a4864993e52cb5fba829cddd1c386b14a6
+import { signupSchema, loginSchema } from "./auth.schema.js";
 
-type AuthRequestBody = {
-    name?: string;
-    email?: string;
-    password?: string;
-};
-
-<<<<<<< HEAD
 function toPublicUser(user: Pick<UserRow, "id" | "name" | "email" | "role">) {
     return {
         id: user.id,
-=======
-function toPublicUser(user: { _id: unknown; name: string; email: string; role: string }) {
-    return {
-        id: String(user._id),
->>>>>>> ee5df9a4864993e52cb5fba829cddd1c386b14a6
         name: user.name,
         email: user.email,
         role: user.role,
@@ -57,16 +41,15 @@ function clearAuthCookies(res: Response): void {
     res.clearCookie("refreshToken", clearOptions);
 }
 
-export async function signup(req: Request<unknown, unknown, AuthRequestBody>, res: Response): Promise<void> {
+export async function signup(req: Request, res: Response): Promise<void> {
     try {
-        const name = req.body.name?.trim();
-        const email = req.body.email?.trim().toLowerCase();
-        const password = req.body.password;
-
-        if (!name || !email || !password) {
-            res.status(400).json({ message: "Name, email, and password are required." });
+        const parsed = signupSchema.safeParse(req.body);
+        if (!parsed.success) {
+            res.status(400).json({ message: "Invalid signup data.", errors: parsed.error.flatten().fieldErrors });
             return;
         }
+
+        const { name, email, password } = parsed.data;
 
         const passwordCheck = authService.validatePassword(password);
         if (!passwordCheck.valid) {
@@ -74,33 +57,21 @@ export async function signup(req: Request<unknown, unknown, AuthRequestBody>, re
             return;
         }
 
-<<<<<<< HEAD
         const existingUser = await userRepository.findByEmail(email);
-=======
-        const existingUser = await UserModel.findOne({ email });
->>>>>>> ee5df9a4864993e52cb5fba829cddd1c386b14a6
         if (existingUser) {
             res.status(409).json({ message: "An account with that email already exists." });
             return;
         }
 
         const hashedPassword = await authService.hashPassword(password);
-<<<<<<< HEAD
         const user = await userRepository.create({
-=======
-        const user = await UserModel.create({
->>>>>>> ee5df9a4864993e52cb5fba829cddd1c386b14a6
             name,
             email,
             password: hashedPassword,
         });
 
         const payload = {
-<<<<<<< HEAD
             userId: user.id,
-=======
-            userId: String(user._id),
->>>>>>> ee5df9a4864993e52cb5fba829cddd1c386b14a6
             email: user.email,
             role: user.role,
         };
@@ -118,21 +89,17 @@ export async function signup(req: Request<unknown, unknown, AuthRequestBody>, re
     }
 }
 
-export async function login(req: Request<unknown, unknown, AuthRequestBody>, res: Response): Promise<void> {
+export async function login(req: Request, res: Response): Promise<void> {
     try {
-        const email = req.body.email?.trim().toLowerCase();
-        const password = req.body.password;
-
-        if (!email || !password) {
-            res.status(400).json({ message: "Email and password are required." });
+        const parsed = loginSchema.safeParse(req.body);
+        if (!parsed.success) {
+            res.status(400).json({ message: "Invalid login data.", errors: parsed.error.flatten().fieldErrors });
             return;
         }
 
-<<<<<<< HEAD
+        const { email, password } = parsed.data;
+
         const user = await userRepository.findByEmail(email);
-=======
-        const user = await UserModel.findOne({ email });
->>>>>>> ee5df9a4864993e52cb5fba829cddd1c386b14a6
         if (!user) {
             res.status(401).json({ message: "Invalid email or password." });
             return;
@@ -145,11 +112,7 @@ export async function login(req: Request<unknown, unknown, AuthRequestBody>, res
         }
 
         const payload = {
-<<<<<<< HEAD
             userId: user.id,
-=======
-            userId: String(user._id),
->>>>>>> ee5df9a4864993e52cb5fba829cddd1c386b14a6
             email: user.email,
             role: user.role,
         };
@@ -172,25 +135,61 @@ export async function logout(_req: Request, res: Response): Promise<void> {
     res.status(200).json({ message: "Signed out successfully." });
 }
 
+export async function refresh(req: Request, res: Response): Promise<void> {
+    const token = req.cookies?.refreshToken;
+    if (!token) {
+        res.status(401).json({ message: "Refresh token is required." });
+        return;
+    }
+
+    let payload;
+    try {
+        payload = authService.verifyToken(token);
+    } catch {
+        clearAuthCookies(res);
+        res.status(401).json({ message: "Invalid or expired refresh token." });
+        return;
+    }
+
+    if (payload.type !== "refresh") {
+        clearAuthCookies(res);
+        res.status(401).json({ message: "Invalid refresh token." });
+        return;
+    }
+
+    const user = await userRepository.findById(payload.userId);
+    if (!user) {
+        clearAuthCookies(res);
+        res.status(401).json({ message: "Invalid refresh token." });
+        return;
+    }
+
+    const newPayload = {
+        userId: user.id,
+        email: user.email,
+        role: user.role,
+    };
+
+    // Rotate both tokens on every refresh so a stolen refresh token has a short
+    // effective lifetime once the legitimate client refreshes again.
+    const accessToken = authService.generateAccessToken(newPayload);
+    const refreshToken = authService.generateRefreshToken(newPayload);
+    setAuthCookies(res, accessToken, refreshToken);
+
+    res.status(200).json({ user: toPublicUser(user) });
+}
+
 export async function me(req: Request, res: Response): Promise<void> {
     if (!req.user) {
         res.status(401).json({ message: "Authentication required." });
         return;
     }
 
-<<<<<<< HEAD
     const user = await userRepository.findById(req.user.userId);
-=======
-    const user = await UserModel.findById(req.user.userId);
->>>>>>> ee5df9a4864993e52cb5fba829cddd1c386b14a6
     if (!user) {
         res.status(404).json({ message: "User not found." });
         return;
     }
 
     res.status(200).json({ user: toPublicUser(user) });
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> ee5df9a4864993e52cb5fba829cddd1c386b14a6

@@ -1,4 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
+import { env } from "../config/env.js";
 
 type ErrorLike = {
     message?: string;
@@ -26,11 +27,19 @@ function getStackLocation(stack?: string): string | null {
 export function errorMiddleware(error: unknown, req: Request, res: Response, _next: NextFunction): void {
     const knownError = error as ErrorLike;
     const statusCode = knownError.statusCode || knownError.status || 500;
-    const message = knownError.message || "Unexpected server error.";
+    const isServerError = statusCode >= 500;
+    const includeInternals = env.NODE_ENV !== "production";
     const stackLocation = getStackLocation(knownError.stack);
 
+    // Never leak internal error details to the client in production, and never
+    // leak an unexpected 500's raw message either (it may echo DB/driver internals).
+    const message =
+        isServerError && !includeInternals
+            ? "Unexpected server error."
+            : knownError.message || "Unexpected server error.";
+
     console.error({
-        message,
+        message: knownError.message || "Unexpected server error.",
         method: req.method,
         path: req.originalUrl,
         location: stackLocation,
@@ -40,11 +49,15 @@ export function errorMiddleware(error: unknown, req: Request, res: Response, _ne
 
     res.status(statusCode).json({
         message,
-        error: {
-            method: req.method,
-            path: req.originalUrl,
-            location: stackLocation,
-            code: knownError.code,
-        },
+        ...(includeInternals
+            ? {
+                  error: {
+                      method: req.method,
+                      path: req.originalUrl,
+                      location: stackLocation,
+                      code: knownError.code,
+                  },
+              }
+            : {}),
     });
 }

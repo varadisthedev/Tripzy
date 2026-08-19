@@ -1,9 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import airplaneImg from "../../../assets/images/Airplane.png";
 import BoardingPassSearch from "./BoardingPassSearch";
+import { createSearchHistory } from "../../../lib/authApi";
 
 export default function CatalogHero() {
+  const [searchNotice, setSearchNotice] = useState("");
+
+  const handleSearch = async (search) => {
+    const from = search.fromCity?.trim();
+    const to = search.whereTo?.trim();
+    const query = from && to ? `${from} to ${to}` : to || from || "New search";
+
+    try {
+      await createSearchHistory({
+        query,
+        filters: {
+          fromCity: search.fromCity,
+          whereTo: search.whereTo,
+          startDate: search.startDate,
+          endDate: search.endDate,
+          budget: search.budget,
+          ...search.filters,
+        },
+      });
+      setSearchNotice("Saved — you'll see this on your dashboard.");
+    } catch {
+      // Best-effort: an anonymous visitor or a transient failure shouldn't
+      // block browsing, so we just skip the confirmation silently.
+      setSearchNotice("");
+    }
+  };
+
   return (
     <section className="relative overflow-visible bg-gradient-to-b from-[#EBF3FF] via-[#F4F8FF] to-[#F7F9FC] pt-32 md:pt-36 pb-10 px-6 rounded-b-[40px] shadow-sm">
       
@@ -99,7 +127,10 @@ export default function CatalogHero() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="w-full"
         >
-          <BoardingPassSearch />
+          <BoardingPassSearch onSearch={handleSearch} />
+          {searchNotice && (
+            <p className="text-center text-sm font-medium text-[#0f766e] mt-3">{searchNotice}</p>
+          )}
         </motion.div>
 
       </div>

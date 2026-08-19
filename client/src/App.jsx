@@ -6,6 +6,7 @@ import CatalogPage from "./pages/Catalog/CatalogPage";
 import DashboardPage from "./pages/Dashboard/DashboardPage";
 import MyBookingsPage from "./pages/Bookings/MyBookingsPage";
 import ProfilePage from "./pages/Profile/ProfilePage";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 import "./styles/index.css";
 
 export default function App() {
@@ -16,9 +17,30 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/catalog" element={<CatalogPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/bookings" element={<MyBookingsPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/bookings"
+          element={
+            <ProtectedRoute>
+              <MyBookingsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

@@ -77,20 +77,9 @@ export default function SignupPage() {
             <h1 className="font-display font-extrabold text-[#0f2442] text-4xl sm:text-[2.65rem] leading-[1.15] mb-3">
               Let's Get <span className="text-[#2c497f]">Started</span>
             </h1>
-<<<<<<< HEAD
             <p className="text-[#000000] text-base sm:text-lg leading-relaxed max-w-[290px] font-sans-secondary font-bold italic">
               Discover incredible places across India and plan your perfect
               journey with ease.
-=======
-<<<<<<< HEAD
-            <p className="text-[#000000] text-sm leading-relaxed max-w-[260px] font-sans-dm font-bold">
-              Discover incredible places across India and plan your perfect
-              journey with ease.
-=======
-            <p className="text-[#000000] text-base sm:text-lg leading-relaxed max-w-[290px] font-sans-secondary font-bold italic">
-              Discover incredible places across India and plan your perfect journey with ease.
->>>>>>> 5773f2c480c523555d3711538211c9f34f87f0f1
->>>>>>> ee5df9a4864993e52cb5fba829cddd1c386b14a6
             </p>
           </div>
         </div>
