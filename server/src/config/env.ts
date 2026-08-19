@@ -36,5 +36,10 @@ const data = parsed.data;
 export const env = {
     ...data,
     DATABASE_URL: (data.DATABASE_URL || data.NEON_URI) as string,
-    CORS_ORIGIN_LIST: data.CORS_ORIGINS.split(",").map((origin) => origin.trim()).filter(Boolean),
+    // Trailing slashes are stripped because browsers never send one in the
+    // Origin header (it's scheme+host+port only) — a trailing slash left in
+    // here would silently fail to match and block a legitimate origin.
+    CORS_ORIGIN_LIST: data.CORS_ORIGINS.split(",")
+        .map((origin) => origin.trim().replace(/\/+$/, ""))
+        .filter(Boolean),
 };

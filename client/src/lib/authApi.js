@@ -1,4 +1,6 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+// Strip trailing slash(es) so `${API_BASE_URL}/api${path}` never doubles up
+// on "//" if VITE_API_URL is set with a trailing slash on the hosting platform.
+const API_BASE_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000").replace(/\/+$/, "");
 
 const AUTH_PATHS_EXEMPT_FROM_REFRESH = ["/auth/login", "/auth/signup", "/auth/refresh", "/auth/logout"];
 
