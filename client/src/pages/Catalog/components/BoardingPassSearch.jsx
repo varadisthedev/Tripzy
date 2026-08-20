@@ -34,7 +34,7 @@ import {
   Landmark,
   Accessibility,
   ChevronDown,
-  ChevronsUpDown
+  ChevronsUpDown,
 } from "lucide-react";
 
 // ── Persian Blue Color Token ──
@@ -43,15 +43,25 @@ const PERSIAN_BLUE = "#1C3F94";
 const HERO_BG = "#F4F8FF";
 
 const MONTHS = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 const DAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
 // ── Decorative barcode bar widths (px) for the Proceed stub ──
 const BARCODE_BARS = [
-  2, 1, 1, 3, 1, 2, 1, 1, 3, 2, 1, 1, 2, 1, 3, 1, 1, 2, 1, 3,
-  1, 2, 1, 1, 3, 1, 2, 1, 1, 2, 3, 1,
+  2, 1, 1, 3, 1, 2, 1, 1, 3, 2, 1, 1, 2, 1, 3, 1, 1, 2, 1, 3, 1, 2, 1, 1, 3, 1,
+  2, 1, 1, 2, 3, 1,
 ];
 
 // ── Vertical positions (percent) for the punched scallop notches along the outer edges ──
@@ -60,10 +70,16 @@ const EDGE_NOTCH_POSITIONS = [20, 40, 60, 80];
 /* ── Calendar Picker Dropdown ── */
 function CalendarPicker({ startDate, endDate, onSelect, onClose }) {
   const today = new Date();
-  const [viewYear, setViewYear] = useState(startDate ? startDate.getFullYear() : today.getFullYear());
-  const [viewMonth, setViewMonth] = useState(startDate ? startDate.getMonth() : today.getMonth());
+  const [viewYear, setViewYear] = useState(
+    startDate ? startDate.getFullYear() : today.getFullYear(),
+  );
+  const [viewMonth, setViewMonth] = useState(
+    startDate ? startDate.getMonth() : today.getMonth(),
+  );
   const [hovered, setHovered] = useState(null);
-  const [selecting, setSelecting] = useState(startDate && endDate ? "start" : startDate ? "end" : "start");
+  const [selecting, setSelecting] = useState(
+    startDate && endDate ? "start" : startDate ? "end" : "start",
+  );
 
   const prevMonth = () => {
     if (viewMonth === 0) {
@@ -109,14 +125,22 @@ function CalendarPicker({ startDate, endDate, onSelect, onClose }) {
 
   const isStart = (day) => {
     if (!startDate) return false;
-    return new Date(viewYear, viewMonth, day).toDateString() === startDate.toDateString();
+    return (
+      new Date(viewYear, viewMonth, day).toDateString() ===
+      startDate.toDateString()
+    );
   };
   const isEnd = (day) => {
     if (!endDate) return false;
-    return new Date(viewYear, viewMonth, day).toDateString() === endDate.toDateString();
+    return (
+      new Date(viewYear, viewMonth, day).toDateString() ===
+      endDate.toDateString()
+    );
   };
   const isToday = (day) => {
-    return new Date(viewYear, viewMonth, day).toDateString() === today.toDateString();
+    return (
+      new Date(viewYear, viewMonth, day).toDateString() === today.toDateString()
+    );
   };
 
   const total = daysInMonth(viewYear, viewMonth);
@@ -126,22 +150,34 @@ function CalendarPicker({ startDate, endDate, onSelect, onClose }) {
   for (let d = 1; d <= total; d++) cells.push(d);
 
   return (
-    <div className="bg-white shadow-2xl border-2 p-3 w-[260px] rounded-lg" style={{ borderColor: PERSIAN_BLUE }}>
+    <div
+      className="bg-white shadow-2xl border-2 p-3 w-[260px] rounded-lg"
+      style={{ borderColor: PERSIAN_BLUE }}
+    >
       <div className="flex items-center justify-between mb-2">
-        <button onClick={prevMonth} className="p-0.5 hover:bg-gray-100 rounded transition-colors">
+        <button
+          onClick={prevMonth}
+          className="p-0.5 hover:bg-gray-100 rounded transition-colors"
+        >
           <ChevronLeft size={16} />
         </button>
         <span className="font-bold text-xs text-gray-800">
           {MONTHS[viewMonth]} {viewYear}
         </span>
-        <button onClick={nextMonth} className="p-0.5 hover:bg-gray-100 rounded transition-colors">
+        <button
+          onClick={nextMonth}
+          className="p-0.5 hover:bg-gray-100 rounded transition-colors"
+        >
           <ChevronRight size={16} />
         </button>
       </div>
 
       <div className="grid grid-cols-7 mb-1">
         {DAYS.map((d) => (
-          <div key={d} className="text-center text-[9px] font-bold text-gray-400 py-0.5">
+          <div
+            key={d}
+            className="text-center text-[9px] font-bold text-gray-400 py-0.5"
+          >
             {d}
           </div>
         ))}
@@ -156,7 +192,9 @@ function CalendarPicker({ startDate, endDate, onSelect, onClose }) {
           return (
             <button
               key={day}
-              onMouseEnter={() => setHovered(new Date(viewYear, viewMonth, day))}
+              onMouseEnter={() =>
+                setHovered(new Date(viewYear, viewMonth, day))
+              }
               onMouseLeave={() => setHovered(null)}
               onClick={() => handleDayClick(day)}
               className={`
@@ -184,13 +222,22 @@ function CalendarPicker({ startDate, endDate, onSelect, onClose }) {
       </div>
 
       <div className="mt-2 pt-1.5 border-t border-gray-100 text-[10px] font-medium text-gray-400 text-center">
-        {selecting === "start" ? "Select departure date" : "Now select return date"}
+        {selecting === "start"
+          ? "Select departure date"
+          : "Now select return date"}
       </div>
     </div>
   );
 }
 
-const fmt = (d) => (d ? d.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : null);
+const fmt = (d) =>
+  d
+    ? d.toLocaleDateString("en-IN", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      })
+    : null;
 
 export default function BoardingPassSearch({ onSearch }) {
   // Main inputs
@@ -222,8 +269,10 @@ export default function BoardingPassSearch({ onSearch }) {
   // Close calendar or filters on outside click
   useEffect(() => {
     const handler = (e) => {
-      if (calRef.current && !calRef.current.contains(e.target)) setShowCal(false);
-      if (filterRef.current && !filterRef.current.contains(e.target)) setShowFilters(false);
+      if (calRef.current && !calRef.current.contains(e.target))
+        setShowCal(false);
+      if (filterRef.current && !filterRef.current.contains(e.target))
+        setShowFilters(false);
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
@@ -286,13 +335,17 @@ export default function BoardingPassSearch({ onSearch }) {
   };
 
   const dateLabel =
-    startDate && endDate ? `${fmt(startDate)} – ${fmt(endDate)}` : startDate ? `${fmt(startDate)} – ?` : null;
+    startDate && endDate
+      ? `${fmt(startDate)} – ${fmt(endDate)}`
+      : startDate
+        ? `${fmt(startDate)} – ?`
+        : null;
 
   return (
     <div className="w-full max-w-5xl mx-auto relative z-30">
       {/* ── Flight Ticket / Boarding Pass ── */}
       <div
-        className="relative flex flex-col lg:flex-row bg-white rounded-[22px] sm:rounded-[26px] shadow-[0_20px_60px_rgba(28,63,148,0.16)] overflow-visible"
+        className="relative flex flex-col lg:flex-row bg-white rounded-[22px] sm:rounded-[26px] overflow-visible"
         style={{ border: `3px solid ${PERSIAN_BLUE}` }}
       >
         {/* ── Thick left "spine" band (ticket-stub ridge) ── */}
@@ -315,9 +368,15 @@ export default function BoardingPassSearch({ onSearch }) {
           <div className="flex flex-col sm:flex-row">
             {/* FROM */}
             <div className="w-full sm:flex-[2] min-w-0 flex items-center gap-3 px-5 py-4 hover:bg-blue-50/40 transition-colors">
-              <MapPin size={18} className="flex-shrink-0" style={{ color: PERSIAN_BLUE }} />
+              <MapPin
+                size={18}
+                className="flex-shrink-0"
+                style={{ color: PERSIAN_BLUE }}
+              />
               <div className="min-w-0 flex-1 overflow-hidden">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">From</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">
+                  From
+                </p>
                 <input
                   type="text"
                   value={fromCity}
@@ -325,15 +384,23 @@ export default function BoardingPassSearch({ onSearch }) {
                   placeholder="Departure city"
                   className="block w-full text-sm font-bold text-gray-800 bg-transparent focus:outline-none placeholder:text-gray-500 placeholder:font-medium mt-0.5 truncate"
                 />
-                <p className="text-[11px] text-gray-400 mt-0.5 whitespace-nowrap">Enter departure city</p>
+                <p className="text-[11px] text-gray-400 mt-0.5 whitespace-nowrap">
+                  Enter departure city
+                </p>
               </div>
             </div>
 
             {/* WHERE TO */}
             <div className="w-full sm:flex-[2] min-w-0 flex items-center gap-3 px-5 py-4 hover:bg-blue-50/40 transition-colors">
-              <MapPin size={18} className="flex-shrink-0" style={{ color: PERSIAN_BLUE }} />
+              <MapPin
+                size={18}
+                className="flex-shrink-0"
+                style={{ color: PERSIAN_BLUE }}
+              />
               <div className="min-w-0 flex-1 overflow-hidden">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Where</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">
+                  Where
+                </p>
                 <input
                   type="text"
                   value={whereTo}
@@ -341,7 +408,9 @@ export default function BoardingPassSearch({ onSearch }) {
                   placeholder="Destination"
                   className="block w-full text-sm font-bold text-gray-800 bg-transparent focus:outline-none placeholder:text-gray-500 placeholder:font-medium mt-0.5 truncate"
                 />
-                <p className="text-[11px] text-gray-400 mt-0.5 whitespace-nowrap">Enter destination</p>
+                <p className="text-[11px] text-gray-400 mt-0.5 whitespace-nowrap">
+                  Enter destination
+                </p>
               </div>
             </div>
 
@@ -352,12 +421,21 @@ export default function BoardingPassSearch({ onSearch }) {
                 onClick={() => setShowCal((p) => !p)}
                 className="w-full h-full flex items-center gap-3 px-5 py-4 hover:bg-blue-50/40 transition-colors text-left"
               >
-                <Calendar size={18} className="flex-shrink-0" style={{ color: PERSIAN_BLUE }} />
+                <Calendar
+                  size={18}
+                  className="flex-shrink-0"
+                  style={{ color: PERSIAN_BLUE }}
+                />
                 <div className="min-w-0 flex-1 overflow-hidden">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Duration</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">
+                    Duration
+                  </p>
                   {dateLabel ? (
                     <div className="flex items-center gap-1 mt-0.5 min-w-0">
-                      <p className="text-sm font-bold truncate" style={{ color: PERSIAN_BLUE }}>
+                      <p
+                        className="text-sm font-bold truncate"
+                        style={{ color: PERSIAN_BLUE }}
+                      >
                         {dateLabel}
                       </p>
                       <button
@@ -368,14 +446,16 @@ export default function BoardingPassSearch({ onSearch }) {
                       </button>
                     </div>
                   ) : (
-                    <p className="text-sm font-bold text-gray-700 mt-0.5 whitespace-nowrap">Add dates</p>
+                    <p className="text-sm font-bold text-gray-700 mt-0.5 whitespace-nowrap">
+                      Add dates
+                    </p>
                   )}
                   <p className="text-[11px] text-gray-400 mt-0.5 whitespace-nowrap">
                     {startDate && endDate
                       ? `${Math.round((endDate - startDate) / 86400000)} nights`
                       : startDate
-                      ? "Select return date"
-                      : "Select dates"}
+                        ? "Select return date"
+                        : "Select dates"}
                   </p>
                 </div>
               </button>
@@ -394,9 +474,15 @@ export default function BoardingPassSearch({ onSearch }) {
 
             {/* BUDGET */}
             <div className="w-full sm:flex-[1.6] min-w-0 flex items-center gap-3 px-5 py-4 hover:bg-blue-50/40 transition-colors">
-              <IndianRupee size={18} className="flex-shrink-0" style={{ color: PERSIAN_BLUE }} />
+              <IndianRupee
+                size={18}
+                className="flex-shrink-0"
+                style={{ color: PERSIAN_BLUE }}
+              />
               <div className="min-w-0 flex-1 overflow-hidden">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Budget</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">
+                  Budget
+                </p>
                 <div className="flex items-center gap-2 mt-0.5">
                   <input
                     type="number"
@@ -405,28 +491,41 @@ export default function BoardingPassSearch({ onSearch }) {
                     placeholder="Amount"
                     className="block w-full min-w-0 text-sm font-bold text-gray-800 bg-transparent focus:outline-none placeholder:text-gray-500 placeholder:font-medium truncate [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
-                  <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-md bg-slate-100 text-slate-400">
+                  {/* <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-md bg-slate-100 text-slate-400">
                     <ChevronsUpDown size={12} />
-                  </span>
+                  </span> */}
                 </div>
-                <p className="text-[11px] text-gray-400 mt-0.5 whitespace-nowrap">Enter budget (₹)</p>
+                <p className="text-[11px] text-gray-400 mt-0.5 whitespace-nowrap">
+                  Enter budget (₹)
+                </p>
               </div>
             </div>
 
             {/* MORE FILTERS TRIGGER (Clicking ANYWHERE in box/icon/label/text opens drawer) */}
-            <div ref={filterRef} className="relative w-full sm:flex-[1.9] min-w-0">
+            <div
+              ref={filterRef}
+              className="relative w-full sm:flex-[1.9] min-w-0"
+            >
               <button
                 type="button"
                 onClick={() => setShowFilters((p) => !p)}
                 className="w-full h-full flex items-center gap-2.5 px-4 sm:px-5 py-4 hover:bg-blue-50/40 transition-colors text-left cursor-pointer group"
               >
-                <SlidersHorizontal size={18} className="flex-shrink-0 transition-transform group-hover:scale-110" style={{ color: PERSIAN_BLUE }} />
+                <SlidersHorizontal
+                  size={18}
+                  className="flex-shrink-0 transition-transform group-hover:scale-110"
+                  style={{ color: PERSIAN_BLUE }}
+                />
                 <div className="min-w-0 flex-1 overflow-hidden">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Filters</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">
+                    Filters
+                  </p>
                   <p className="text-[13px] leading-tight font-bold text-gray-800 group-hover:text-[#1C3F94] transition-colors mt-0.5">
                     More filter
                   </p>
-                  <p className="text-[11px] text-gray-400 mt-0.5 truncate">Customize trip</p>
+                  <p className="text-[11px] text-gray-400 mt-0.5 truncate">
+                    Customize trip
+                  </p>
                 </div>
               </button>
 
@@ -448,7 +547,9 @@ export default function BoardingPassSearch({ onSearch }) {
                       <div className="grid grid-cols-12 gap-4 items-start">
                         {/* Adults */}
                         <div className="col-span-3">
-                          <label className="text-[11px] font-bold text-slate-800 block mb-1">Adults (15+)</label>
+                          <label className="text-[11px] font-bold text-slate-800 block mb-1">
+                            Adults (15+)
+                          </label>
                           <div className="flex items-center justify-between border border-slate-200 rounded-xl px-2.5 py-1.5 bg-slate-50/50">
                             <button
                               type="button"
@@ -457,7 +558,9 @@ export default function BoardingPassSearch({ onSearch }) {
                             >
                               <Minus size={12} />
                             </button>
-                            <span className="font-bold text-xs text-slate-800">{adults}</span>
+                            <span className="font-bold text-xs text-slate-800">
+                              {adults}
+                            </span>
                             <button
                               type="button"
                               onClick={() => setAdults(adults + 1)}
@@ -466,21 +569,29 @@ export default function BoardingPassSearch({ onSearch }) {
                               <Plus size={12} />
                             </button>
                           </div>
-                          <p className="text-[10px] text-slate-400 mt-1">Ages 15 and above</p>
+                          <p className="text-[10px] text-slate-400 mt-1">
+                            Ages 15 and above
+                          </p>
                         </div>
 
                         {/* Children */}
                         <div className="col-span-3">
-                          <label className="text-[11px] font-bold text-slate-800 block mb-1">Children</label>
+                          <label className="text-[11px] font-bold text-slate-800 block mb-1">
+                            Children
+                          </label>
                           <div className="flex items-center justify-between border border-slate-200 rounded-xl px-2.5 py-1.5 bg-slate-50/50">
                             <button
                               type="button"
-                              onClick={() => setChildren(Math.max(0, children - 1))}
+                              onClick={() =>
+                                setChildren(Math.max(0, children - 1))
+                              }
                               className="w-6 h-6 rounded-md border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-white hover:border-slate-300 transition-colors"
                             >
                               <Minus size={12} />
                             </button>
-                            <span className="font-bold text-xs text-slate-800">{children}</span>
+                            <span className="font-bold text-xs text-slate-800">
+                              {children}
+                            </span>
                             <button
                               type="button"
                               onClick={() => setChildren(children + 1)}
@@ -489,12 +600,16 @@ export default function BoardingPassSearch({ onSearch }) {
                               <Plus size={12} />
                             </button>
                           </div>
-                          <p className="text-[10px] text-slate-400 mt-1">Ages 2 – 15</p>
+                          <p className="text-[10px] text-slate-400 mt-1">
+                            Ages 2 – 15
+                          </p>
                         </div>
 
                         {/* Rooms */}
                         <div className="col-span-3">
-                          <label className="text-[11px] font-bold text-slate-800 block mb-1">Rooms</label>
+                          <label className="text-[11px] font-bold text-slate-800 block mb-1">
+                            Rooms
+                          </label>
                           <div className="flex items-center justify-between border border-slate-200 rounded-xl px-2.5 py-1.5 bg-slate-50/50">
                             <button
                               type="button"
@@ -503,7 +618,9 @@ export default function BoardingPassSearch({ onSearch }) {
                             >
                               <Minus size={12} />
                             </button>
-                            <span className="font-bold text-xs text-slate-800">{rooms}</span>
+                            <span className="font-bold text-xs text-slate-800">
+                              {rooms}
+                            </span>
                             <button
                               type="button"
                               onClick={() => setRooms(rooms + 1)}
@@ -512,12 +629,16 @@ export default function BoardingPassSearch({ onSearch }) {
                               <Plus size={12} />
                             </button>
                           </div>
-                          <p className="text-[10px] text-slate-400 mt-1">Separate rooms</p>
+                          <p className="text-[10px] text-slate-400 mt-1">
+                            Separate rooms
+                          </p>
                         </div>
 
                         {/* Accommodation Type */}
                         <div className="col-span-3">
-                          <label className="text-[11px] font-bold text-slate-800 block mb-1">Accommodation Type</label>
+                          <label className="text-[11px] font-bold text-slate-800 block mb-1">
+                            Accommodation Type
+                          </label>
                           <div className="grid grid-cols-4 gap-1">
                             {[
                               { name: "Budget", icon: Wallet },
@@ -539,7 +660,9 @@ export default function BoardingPassSearch({ onSearch }) {
                                   }`}
                                 >
                                   <IconComp size={14} className="mb-0.5" />
-                                  <span className="text-[9px] leading-tight font-semibold">{item.name}</span>
+                                  <span className="text-[9px] leading-tight font-semibold">
+                                    {item.name}
+                                  </span>
                                 </button>
                               );
                             })}
@@ -551,7 +674,9 @@ export default function BoardingPassSearch({ onSearch }) {
                       <div className="grid grid-cols-12 gap-4 items-start">
                         {/* Preferred Transport */}
                         <div className="col-span-3">
-                          <label className="text-[11px] font-bold text-slate-800 block mb-1">Preferred Transport</label>
+                          <label className="text-[11px] font-bold text-slate-800 block mb-1">
+                            Preferred Transport
+                          </label>
                           <div className="grid grid-cols-4 gap-1">
                             {[
                               { name: "Flight", icon: Plane },
@@ -573,7 +698,9 @@ export default function BoardingPassSearch({ onSearch }) {
                                   }`}
                                 >
                                   <IconComp size={14} className="mb-0.5" />
-                                  <span className="text-[9px] leading-tight font-semibold">{item.name}</span>
+                                  <span className="text-[9px] leading-tight font-semibold">
+                                    {item.name}
+                                  </span>
                                 </button>
                               );
                             })}
@@ -582,7 +709,9 @@ export default function BoardingPassSearch({ onSearch }) {
 
                         {/* Trip Type */}
                         <div className="col-span-3">
-                          <label className="text-[11px] font-bold text-slate-800 block mb-1">Trip Type</label>
+                          <label className="text-[11px] font-bold text-slate-800 block mb-1">
+                            Trip Type
+                          </label>
                           <div className="grid grid-cols-2 gap-1.5">
                             {[
                               { name: "Solo", icon: User },
@@ -604,7 +733,9 @@ export default function BoardingPassSearch({ onSearch }) {
                                   }`}
                                 >
                                   <IconComp size={13} />
-                                  <span className="text-[11px] font-semibold">{item.name}</span>
+                                  <span className="text-[11px] font-semibold">
+                                    {item.name}
+                                  </span>
                                 </button>
                               );
                             })}
@@ -614,7 +745,10 @@ export default function BoardingPassSearch({ onSearch }) {
                         {/* Interests (Flexible wrap pill grid so NO text truncates) */}
                         <div className="col-span-6">
                           <label className="text-[11px] font-bold text-slate-800 block mb-1">
-                            Interests <span className="font-normal text-slate-400 text-[10px]">(Select all that apply)</span>
+                            Interests{" "}
+                            <span className="font-normal text-slate-400 text-[10px]">
+                              (Select all that apply)
+                            </span>
                           </label>
                           <div className="flex flex-wrap gap-1.5">
                             {[
@@ -628,12 +762,16 @@ export default function BoardingPassSearch({ onSearch }) {
                               { name: "History", icon: Landmark },
                             ].map((item) => {
                               const IconComp = item.icon;
-                              const isSelected = selectedInterests.includes(item.name);
+                              const isSelected = selectedInterests.includes(
+                                item.name,
+                              );
                               return (
                                 <button
                                   key={item.name}
                                   type="button"
-                                  onClick={() => handleInterestToggle(item.name)}
+                                  onClick={() =>
+                                    handleInterestToggle(item.name)
+                                  }
                                   className={`relative flex items-center gap-1 px-2.5 py-1.5 rounded-xl border transition-all ${
                                     isSelected
                                       ? "border-[#2563EB] bg-blue-50/70 text-[#2563EB] font-bold shadow-xs"
@@ -641,7 +779,9 @@ export default function BoardingPassSearch({ onSearch }) {
                                   }`}
                                 >
                                   <IconComp size={13} />
-                                  <span className="text-[11px] font-semibold whitespace-nowrap">{item.name}</span>
+                                  <span className="text-[11px] font-semibold whitespace-nowrap">
+                                    {item.name}
+                                  </span>
                                   {isSelected && (
                                     <span className="w-3.5 h-3.5 bg-[#2563EB] text-white rounded-full flex items-center justify-center text-[8px] ml-0.5">
                                       ✓
@@ -658,16 +798,25 @@ export default function BoardingPassSearch({ onSearch }) {
                       <div className="grid grid-cols-12 gap-4 items-center pt-1 border-t border-slate-100">
                         {/* Accessibility */}
                         <div className="col-span-4">
-                          <label className="text-[11px] font-bold text-slate-800 block mb-1">Accessibility</label>
+                          <label className="text-[11px] font-bold text-slate-800 block mb-1">
+                            Accessibility
+                          </label>
                           <div
                             onClick={() => setWheelchair(!wheelchair)}
                             className={`flex items-center justify-between p-2 rounded-xl border cursor-pointer transition-all ${
-                              wheelchair ? "border-[#2563EB] bg-blue-50/40" : "border-slate-200 hover:bg-slate-50"
+                              wheelchair
+                                ? "border-[#2563EB] bg-blue-50/40"
+                                : "border-slate-200 hover:bg-slate-50"
                             }`}
                           >
                             <div className="flex items-center gap-1.5">
-                              <Accessibility size={15} className="text-slate-600" />
-                              <span className="text-[11px] font-semibold text-slate-700">Wheelchair Friendly</span>
+                              <Accessibility
+                                size={15}
+                                className="text-slate-600"
+                              />
+                              <span className="text-[11px] font-semibold text-slate-700">
+                                Wheelchair Friendly
+                              </span>
                             </div>
                             <input
                               type="checkbox"
@@ -680,7 +829,9 @@ export default function BoardingPassSearch({ onSearch }) {
 
                         {/* Travel Style */}
                         <div className="col-span-3">
-                          <label className="text-[11px] font-bold text-slate-800 block mb-1">Travel Style</label>
+                          <label className="text-[11px] font-bold text-slate-800 block mb-1">
+                            Travel Style
+                          </label>
                           <div className="relative">
                             <select
                               value={travelStyle}
@@ -693,14 +844,20 @@ export default function BoardingPassSearch({ onSearch }) {
                               <option value="Balanced">⚖️ Balanced</option>
                               <option value="Off-beat">🌿 Off-beat</option>
                             </select>
-                            <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                            <ChevronDown
+                              size={14}
+                              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                            />
                           </div>
                         </div>
 
                         {/* Special Requests */}
                         <div className="col-span-5">
                           <label className="text-[11px] font-bold text-slate-800 block mb-1">
-                            Special Requests <span className="font-normal text-slate-400 text-[10px]">(Optional)</span>
+                            Special Requests{" "}
+                            <span className="font-normal text-slate-400 text-[10px]">
+                              (Optional)
+                            </span>
                           </label>
                           <input
                             type="text"
@@ -748,7 +905,11 @@ export default function BoardingPassSearch({ onSearch }) {
               Tripzy Airways
               <span className="hidden sm:inline-flex items-center gap-[1.5px] ml-1">
                 {[3, 5, 3, 5, 3].map((h, i) => (
-                  <span key={i} className="w-[1.5px] bg-slate-300" style={{ height: `${h}px` }} />
+                  <span
+                    key={i}
+                    className="w-[1.5px] bg-slate-300"
+                    style={{ height: `${h}px` }}
+                  />
                 ))}
               </span>
             </div>
@@ -828,7 +989,11 @@ export default function BoardingPassSearch({ onSearch }) {
             {BARCODE_BARS.map((w, i) => (
               <span
                 key={i}
-                style={{ width: `${w}px`, backgroundColor: "#ffffff", opacity: 0.5 }}
+                style={{
+                  width: `${w}px`,
+                  backgroundColor: "#ffffff",
+                  opacity: 0.5,
+                }}
                 className="h-full"
               />
             ))}
