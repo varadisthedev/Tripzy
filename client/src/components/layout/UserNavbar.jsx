@@ -1,7 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { LayoutGrid, ShoppingBag, Calendar, Crown, Bell, ChevronDown, User, LogOut } from "lucide-react";
+import {
+  LayoutGrid,
+  ShoppingBag,
+  Calendar,
+  Crown,
+  Bell,
+  ChevronDown,
+  User,
+  LogOut,
+} from "lucide-react";
 import logoImg from "../../assets/images/logo.png";
 import { fetchCurrentUser, logoutUser } from "../../lib/authApi";
 
@@ -14,8 +23,8 @@ export default function UserNavbar() {
   const menuRef = useRef(null);
 
   const navItems = [
-    { name: "Dashboard", path: "/dashboard", icon: LayoutGrid },
     { name: "Catalog", path: "/catalog", icon: ShoppingBag },
+    { name: "Dashboard", path: "/dashboard", icon: LayoutGrid },
     { name: "My Bookings", path: "/bookings", icon: Calendar },
   ];
 
@@ -33,7 +42,8 @@ export default function UserNavbar() {
 
   useEffect(() => {
     const handler = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
+      if (menuRef.current && !menuRef.current.contains(e.target))
+        setMenuOpen(false);
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
@@ -61,7 +71,10 @@ export default function UserNavbar() {
     <header className="fixed top-5 left-0 right-0 z-50 flex justify-center px-4">
       <nav className="bg-white rounded-[28px] px-4 sm:px-6 py-2.5 shadow-[0_10px_40px_rgba(19,60,85,0.10)] border border-slate-100 flex items-center justify-between gap-4 w-full max-w-6xl transition-all duration-300">
         {/* ── Brand / Logo ── */}
-        <Link to="/dashboard" className="flex items-center gap-1 group flex-shrink-0">
+        <Link
+          to="/dashboard"
+          className="flex items-center gap-1 group flex-shrink-0"
+        >
           <motion.img
             whileHover={{ scale: 1.05 }}
             src={logoImg}
@@ -84,7 +97,9 @@ export default function UserNavbar() {
               >
                 <div
                   className={`flex items-center gap-2 transition-colors ${
-                    isActive ? "text-[#2563EB]" : "text-slate-700 hover:text-[#2563EB]"
+                    isActive
+                      ? "text-[#2563EB]"
+                      : "text-slate-700 hover:text-[#2563EB]"
                   }`}
                 >
                   <Icon size={18} strokeWidth={isActive ? 2.3 : 1.8} />
@@ -134,7 +149,10 @@ export default function UserNavbar() {
               <span className="hidden md:block text-sm font-semibold text-[#133C55] max-w-[110px] truncate">
                 {user?.name || "Account"}
               </span>
-              <ChevronDown size={14} className="hidden md:block text-slate-400" />
+              <ChevronDown
+                size={14}
+                className="hidden md:block text-slate-400"
+              />
             </button>
 
             <AnimatePresence>
@@ -147,8 +165,12 @@ export default function UserNavbar() {
                   className="absolute right-0 mt-2 w-52 bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.12)] border border-slate-100 py-2 z-50"
                 >
                   <div className="px-4 py-2 border-b border-slate-100 md:hidden">
-                    <p className="text-sm font-bold text-[#133C55] truncate">{user?.name || "Account"}</p>
-                    <p className="text-xs text-slate-400 truncate">{user?.email}</p>
+                    <p className="text-sm font-bold text-[#133C55] truncate">
+                      {user?.name || "Account"}
+                    </p>
+                    <p className="text-xs text-slate-400 truncate">
+                      {user?.email}
+                    </p>
                   </div>
                   <Link
                     to="/profile"

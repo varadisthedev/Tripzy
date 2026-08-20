@@ -33,7 +33,8 @@ import {
   PawPrint,
   Landmark,
   Accessibility,
-  ChevronDown
+  ChevronDown,
+  ChevronsUpDown
 } from "lucide-react";
 
 // ── Persian Blue Color Token ──
@@ -48,7 +49,13 @@ const MONTHS = [
 const DAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
 // ── Decorative barcode bar widths (px) for the Proceed stub ──
-const BARCODE_BARS = [2, 1, 3, 1, 1, 2, 3, 1, 2, 1, 1, 3, 2, 1, 2, 1, 3, 1, 2, 1];
+const BARCODE_BARS = [
+  2, 1, 1, 3, 1, 2, 1, 1, 3, 2, 1, 1, 2, 1, 3, 1, 1, 2, 1, 3,
+  1, 2, 1, 1, 3, 1, 2, 1, 1, 2, 3, 1,
+];
+
+// ── Vertical positions (percent) for the punched scallop notches along the outer edges ──
+const EDGE_NOTCH_POSITIONS = [20, 40, 60, 80];
 
 /* ── Calendar Picker Dropdown ── */
 function CalendarPicker({ startDate, endDate, onSelect, onClose }) {
@@ -288,10 +295,24 @@ export default function BoardingPassSearch({ onSearch }) {
         className="relative flex flex-col lg:flex-row bg-white rounded-[22px] sm:rounded-[26px] shadow-[0_20px_60px_rgba(28,63,148,0.16)] overflow-visible"
         style={{ border: `3px solid ${PERSIAN_BLUE}` }}
       >
+        {/* ── Thick left "spine" band (ticket-stub ridge) ── */}
+        <div
+          className="hidden lg:block absolute inset-y-0 left-0 w-3 rounded-l-[19px] z-10 pointer-events-none"
+          style={{ backgroundColor: PERSIAN_BLUE }}
+        />
+        {/* ── Punched scallop notches biting into the left spine ── */}
+        {EDGE_NOTCH_POSITIONS.map((pos) => (
+          <div
+            key={`left-notch-${pos}`}
+            className="hidden lg:block absolute w-[18px] h-[18px] rounded-full z-20 pointer-events-none -translate-x-1/2 -translate-y-1/2"
+            style={{ left: 0, top: `${pos}%`, backgroundColor: HERO_BG }}
+          />
+        ))}
+
         {/* ── Ticket Main Body ── */}
         <div className="flex-1 min-w-0 flex flex-col">
           {/* Fields */}
-          <div className="flex flex-col sm:flex-row divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
+          <div className="flex flex-col sm:flex-row">
             {/* FROM */}
             <div className="w-full sm:flex-[2] min-w-0 flex items-center gap-3 px-5 py-4 hover:bg-blue-50/40 transition-colors">
               <MapPin size={18} className="flex-shrink-0" style={{ color: PERSIAN_BLUE }} />
@@ -376,13 +397,18 @@ export default function BoardingPassSearch({ onSearch }) {
               <IndianRupee size={18} className="flex-shrink-0" style={{ color: PERSIAN_BLUE }} />
               <div className="min-w-0 flex-1 overflow-hidden">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Budget</p>
-                <input
-                  type="number"
-                  value={budget}
-                  onChange={(e) => setBudget(e.target.value)}
-                  placeholder="Amount"
-                  className="block w-full text-sm font-bold text-gray-800 bg-transparent focus:outline-none placeholder:text-gray-500 placeholder:font-medium mt-0.5 truncate"
-                />
+                <div className="flex items-center gap-2 mt-0.5">
+                  <input
+                    type="number"
+                    value={budget}
+                    onChange={(e) => setBudget(e.target.value)}
+                    placeholder="Amount"
+                    className="block w-full min-w-0 text-sm font-bold text-gray-800 bg-transparent focus:outline-none placeholder:text-gray-500 placeholder:font-medium truncate [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  />
+                  <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-md bg-slate-100 text-slate-400">
+                    <ChevronsUpDown size={12} />
+                  </span>
+                </div>
                 <p className="text-[11px] text-gray-400 mt-0.5 whitespace-nowrap">Enter budget (₹)</p>
               </div>
             </div>
@@ -398,7 +424,7 @@ export default function BoardingPassSearch({ onSearch }) {
                 <div className="min-w-0 flex-1 overflow-hidden">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">Filters</p>
                   <p className="text-[13px] leading-tight font-bold text-gray-800 group-hover:text-[#1C3F94] transition-colors mt-0.5">
-                    More filters
+                    More filter
                   </p>
                   <p className="text-[11px] text-gray-400 mt-0.5 truncate">Customize trip</p>
                 </div>
@@ -720,6 +746,11 @@ export default function BoardingPassSearch({ onSearch }) {
             <div className="flex items-center gap-1.5 text-[9px] sm:text-[10px] font-bold tracking-widest text-slate-400 uppercase whitespace-nowrap">
               <Plane size={11} style={{ color: PERSIAN_BLUE }} />
               Tripzy Airways
+              <span className="hidden sm:inline-flex items-center gap-[1.5px] ml-1">
+                {[3, 5, 3, 5, 3].map((h, i) => (
+                  <span key={i} className="w-[1.5px] bg-slate-300" style={{ height: `${h}px` }} />
+                ))}
+              </span>
             </div>
             <div className="hidden md:flex items-center gap-1.5 text-[9px] sm:text-[10px] font-semibold tracking-widest text-slate-400 uppercase">
               <span className="w-1 h-1 rounded-full bg-slate-300" />
@@ -738,11 +769,11 @@ export default function BoardingPassSearch({ onSearch }) {
             style={{ borderColor: "rgba(28,63,148,0.35)" }}
           />
           <div
-            className="absolute -top-[13px] left-1/2 -translate-x-1/2 w-6 h-6 rounded-full border-2"
+            className="absolute -top-[13px] left-1/2 -translate-x-1/2 w-6 h-6 rounded-full border-2 z-30"
             style={{ backgroundColor: HERO_BG, borderColor: PERSIAN_BLUE }}
           />
           <div
-            className="absolute -bottom-[13px] left-1/2 -translate-x-1/2 w-6 h-6 rounded-full border-2"
+            className="absolute -bottom-[13px] left-1/2 -translate-x-1/2 w-6 h-6 rounded-full border-2 z-30"
             style={{ backgroundColor: HERO_BG, borderColor: PERSIAN_BLUE }}
           />
         </div>
@@ -754,40 +785,55 @@ export default function BoardingPassSearch({ onSearch }) {
             style={{ borderColor: "rgba(28,63,148,0.35)" }}
           />
           <div
-            className="absolute -left-[13px] top-1/2 -translate-y-1/2 w-6 h-6 rounded-full border-2"
+            className="absolute -left-[13px] top-1/2 -translate-y-1/2 w-6 h-6 rounded-full border-2 z-30"
             style={{ backgroundColor: HERO_BG, borderColor: PERSIAN_BLUE }}
           />
           <div
-            className="absolute -right-[13px] top-1/2 -translate-y-1/2 w-6 h-6 rounded-full border-2"
+            className="absolute -right-[13px] top-1/2 -translate-y-1/2 w-6 h-6 rounded-full border-2 z-30"
             style={{ backgroundColor: HERO_BG, borderColor: PERSIAN_BLUE }}
           />
         </div>
 
         {/* ── Ticket Stub: Proceed ── */}
-        <div
-          className="w-full lg:w-[210px] flex-shrink-0 flex items-center justify-center px-5 sm:px-6 py-4 lg:py-6 rounded-b-[19px] sm:rounded-b-[23px] lg:rounded-bl-none lg:rounded-r-[23px]"
+        <button
+          onClick={handleSubmit}
+          type="button"
+          className="relative z-0 w-full lg:w-[210px] flex-shrink-0 flex flex-col items-center justify-center gap-3 px-5 sm:px-6 py-4 lg:py-6 rounded-b-[19px] sm:rounded-b-[23px] lg:rounded-bl-none lg:rounded-r-[23px] overflow-visible hover:brightness-110 active:scale-[0.98] transition-all"
           style={{ backgroundColor: PERSIAN_BLUE }}
         >
-          <button
-            onClick={handleSubmit}
-            type="button"
-            className="w-full flex flex-col items-center gap-2.5 bg-white hover:bg-blue-50 active:scale-[0.97] text-[#1C3F94] font-bold rounded-2xl py-3.5 px-5 transition-all shadow-lg"
-          >
-            <span className="flex items-center gap-2 text-sm tracking-wide">
-              <Search size={16} strokeWidth={2.5} />
-              PROCEED
-            </span>
-            <span className="flex items-end gap-[2px] h-4 w-full justify-center overflow-hidden">
-              {BARCODE_BARS.map((w, i) => (
-                <span
-                  key={i}
-                  style={{ width: `${w}px`, backgroundColor: PERSIAN_BLUE, opacity: 0.55 }}
-                  className="h-full"
-                />
-              ))}
-            </span>
-          </button>
-        </div>
+          {/* Clipped watermark layer */}
+          <div className="absolute inset-0 rounded-b-[19px] sm:rounded-b-[23px] lg:rounded-bl-none lg:rounded-r-[23px] overflow-hidden pointer-events-none">
+            <Plane
+              size={165}
+              strokeWidth={1.5}
+              className="absolute text-white opacity-[0.16]"
+              style={{ top: "-18%", right: "-22%" }}
+            />
+          </div>
+
+          {/* Punched scallop notches biting into the right edge (desktop only) */}
+          {EDGE_NOTCH_POSITIONS.map((pos) => (
+            <div
+              key={`right-notch-${pos}`}
+              className="hidden lg:block absolute w-[18px] h-[18px] rounded-full pointer-events-none translate-x-1/2 -translate-y-1/2"
+              style={{ right: 0, top: `${pos}%`, backgroundColor: HERO_BG }}
+            />
+          ))}
+
+          <span className="relative z-10 flex items-center gap-2 text-xl sm:text-2xl font-extrabold leading-none text-white">
+            <Search size={20} strokeWidth={2.5} className="flex-shrink-0" />
+            <span className="leading-none">Proceed</span>
+          </span>
+          <span className="relative z-10 flex items-end gap-[2px] h-4 w-full justify-center overflow-hidden">
+            {BARCODE_BARS.map((w, i) => (
+              <span
+                key={i}
+                style={{ width: `${w}px`, backgroundColor: "#ffffff", opacity: 0.5 }}
+                className="h-full"
+              />
+            ))}
+          </span>
+        </button>
       </div>
     </div>
   );
